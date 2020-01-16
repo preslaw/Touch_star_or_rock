@@ -2,10 +2,25 @@ import random, sys, copy, os, pygame
 from pygame.locals import *
 import random
 
+class Ingredient:
+  
+  def __init__ (self, image, x, y):
+    self.image = image
+    self.x = x
+    self.y =y
+    self.imageRect = image.get_rect()
+    self.imageRect.x = x
+    self.imageRect.y = y
+  
+  def show(self):
+    DISPLAYSURF.blit(self.image,self.imageRect)
+  
+
 pygame.init()
 DISPLAYSURF = pygame.display.set_mode((600, 600), 0, 32)
 starImg = pygame.image.load('Star.png')
 rockImg = pygame.image.load('Rock.png')
+boyImg = pygame.image.load('boy.png')
 starRect = starImg.get_rect()
 rockRect = rockImg.get_rect()
 starRect.x,starRect.y = 0,0
@@ -20,11 +35,16 @@ drop = False
 
 elementsOnPizza = []
 
+boy = Ingredient(boyImg,0,200)
+rock = Ingredient(rockImg,0,100)
+star = Ingredient(starImg,0,0)
+
 while True:
   
   DISPLAYSURF.fill((0,0,0))
   DISPLAYSURF.blit(starImg,starRect)
   DISPLAYSURF.blit(rockImg,rockRect)
+  boy.show()
   
   for a in elementsOnPizza:
     DISPLAYSURF.blit(a[0],a[1])
