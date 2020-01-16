@@ -1,0 +1,59 @@
+import random, sys, copy, os, pygame
+from pygame.locals import *
+import random
+
+pygame.init()
+DISPLAYSURF = pygame.display.set_mode((600, 600), 0, 32)
+starImg = pygame.image.load('Star.png')
+rockImg = pygame.image.load('Rock.png')
+starRect = starImg.get_rect()
+rockRect = rockImg.get_rect()
+starRect.x,starRect.y = 0,0
+rockRect.x, rockRect.y = 0,100 
+
+mousex=0
+mousey=0
+
+indicator = None
+
+drop = False
+
+elementsOnPizza = []
+
+while True:
+  
+  DISPLAYSURF.fill((0,0,0))
+  DISPLAYSURF.blit(starImg,starRect)
+  DISPLAYSURF.blit(rockImg,rockRect)
+  
+  for a in elementsOnPizza:
+    DISPLAYSURF.blit(a[0],a[1])
+    #DISPLAYSURF.blit(a)
+
+  for event in pygame.event.get():
+    if event.type == QUIT:
+      pygame.quit()
+      sys.exit()
+      
+    if event.type == MOUSEMOTION:
+      mousex, mousey = event.pos
+      if mousex >100:
+        drop = True
+      else:
+        drop = False
+    
+    if indicator:
+      DISPLAYSURF.blit(indicator, (mousex-30,mousey-30))
+
+    if event.type == pygame.MOUSEBUTTONDOWN:
+      if pygame.mouse.get_pressed()[0] and drop ==False:
+        pos = pygame.mouse.get_pos()
+        if starRect.collidepoint(pos):
+          indicator = starImg
+        if rockRect.collidepoint(pos):
+          indicator = rockImg
+      if pygame.mouse.get_pressed()[0] and drop ==True:
+        posx,posy = pygame.mouse.get_pos()
+        elementsOnPizza +=[[indicator,(posx-30,posy-30)]]
+             
+    pygame.display.update()
