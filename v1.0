@@ -1,0 +1,37 @@
+import random, sys, copy, os, pygame
+from pygame.locals import *
+import random
+
+pygame.init()
+DISPLAYSURF = pygame.display.set_mode((600, 600), 0, 32)
+starImg = pygame.image.load('Star.png')
+rockImg = pygame.image.load('Rock.png')
+starRect = starImg.get_rect()
+rockRect = rockImg.get_rect()
+starRect.x = 400
+starRect.y = 400
+rockRect.x = 100 
+rockRect.y= 100
+
+mousex=0
+mousey=0
+
+while True:
+  
+  DISPLAYSURF.fill((0,0,0))
+  DISPLAYSURF.blit(starImg,starRect)
+  DISPLAYSURF.blit(rockImg,rockRect)
+
+  for event in pygame.event.get():
+    if event.type == QUIT:
+      pygame.quit()
+      sys.exit()
+    if event.type == pygame.MOUSEBUTTONDOWN:
+         if pygame.mouse.get_pressed()[0]:
+           pos = pygame.mouse.get_pos()
+           if starRect.collidepoint(pos):
+             print ('TOUCH STAR')
+           if rockRect.collidepoint(pos):
+             print ('TOUCH ROCK')
+             
+    pygame.display.update()
