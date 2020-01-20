@@ -1,0 +1,83 @@
+import random, sys, copy, os, pygame
+from pygame.locals import *
+import random
+
+class Ingredient:
+  
+  def __init__ (self, image, x, y):
+    self.image = image
+    self.x = x
+    self.y =y
+    self.imageRect = image.get_rect()
+    self.imageRect.x = x
+    self.imageRect.y = y
+  
+  def show(self):
+    DISPLAYSURF.blit(self.image,self.imageRect)
+
+pygame.init()
+DISPLAYSURF = pygame.display.set_mode((600, 600), 0, 32)
+starImg = pygame.image.load('Star.png')
+rockImg = pygame.image.load('Rock.png')
+boyImg = pygame.image.load('boy.png')
+treeImg = pygame.image.load('Tree_Short.png')
+
+indicator = None
+
+drop = False # drop==True - dodaje skladniki
+
+elementsOnPizza = []
+
+star = Ingredient(starImg,0,0)
+rock = Ingredient(rockImg,0,100)
+boy = Ingredient(boyImg,0,200)
+tree = Ingredient(treeImg,0,300)
+
+menuIcons = [boy,rock,star,tree]
+
+while True:
+  
+  DISPLAYSURF.fill((0,0,0))
+  
+  #show ingredients on left side
+  for a in menuIcons:
+    a.show()
+  
+  #shows ingredients laid on pizza
+  for a in elementsOnPizza:
+    DISPLAYSURF.blit(a[0],a[1])
+
+  for event in pygame.event.get():
+    if event.type == QUIT:
+      pygame.quit()
+      sys.exit()
+      
+    if event.type == MOUSEMOTION:
+      mousex, mousey = event.pos
+      if mousex >100:
+        drop = True
+      else:
+        drop = False
+    
+    if indicator:
+      DISPLAYSURF.blit(indicator, (mousex-30,mousey-30))
+
+    if event.type == pygame.MOUSEBUTTONDOWN:
+      if pygame.mouse.get_pressed()[0] and drop ==False:
+        pos = pygame.mouse.get_pos()
+        if star.imageRect.collidepoint(pos):
+          indicator = starImg
+        if rock.imageRect.collidepoint(pos):
+          indicator = rockImg
+        if boy.imageRect.collidepoint(pos):
+          indicator = boyImg
+        if tree.imageRect.collidepoint(pos):
+          indicator = treeImg
+          
+      if pygame.mouse.get_pressed()[0] and drop ==True:
+        posx,posy = pygame.mouse.get_pos()
+        elementsOnPizza +=[[indicator,(posx-30,posy-30)]]
+      if pygame.mouse.get_pressed()[2] and drop ==True and len(elementsOnPizza)>0:
+        elementsOnPizza.pop(len(elementsOnPizza)-1)
+             
+    pygame.display.update()
